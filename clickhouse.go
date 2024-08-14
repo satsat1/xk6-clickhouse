@@ -1,12 +1,12 @@
-package pkg
+package clickhouse
 
 import (
-  "context"
+	"context"
 	"encoding/json"
 	"fmt"
-  
+	
 	"github.com/ClickHouse/clickhouse-go/v2"
-  "github.com/ClickHouse/clickhouse-go/v2/lib/driver"
+	"github.com/ClickHouse/clickhouse-go/v2/lib/driver"
 	"github.com/mstoykov/envconfig"
 	"go.k6.io/k6/lib/types"
 	"gopkg.in/guregu/null.v4"
@@ -15,14 +15,14 @@ import (
 )
 
 func init() {
-	k6modules.Register("k6/x/clickhouse", new(Clickhouse))
+	modules.Register("k6/x/clickhouse", new(Clickhouse))
 }
 
 type Clickhouse struct{}
 
-type Client struct {
-	client *Clickhouse.Client
-}
+// type Client struct {
+// 	client *Clickhouse.Client
+// }
 
 func (cl *Clickhouse) Connect(connURI string) (*clickhouse.Conn, error) {
 	clickConn, err := clickhouse.Open(connURI)
