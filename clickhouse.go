@@ -1,27 +1,62 @@
 package clickhouse
 
 import (
-    "fmt"
-    "go.k6.io/k6/js/modules"
+	"context"
+	"encoding/json"
+	"fmt"
+	
+	"github.com/ClickHouse/clickhouse-go/v2"
+	"github.com/ClickHouse/clickhouse-go/v2/lib/driver"
+	"github.com/mstoykov/envconfig"
+	"go.k6.io/k6/lib/types"
+	"gopkg.in/guregu/null.v4"
+	"strings"
+	"time"
 )
 
-// init is called by the Go runtime at application startup.
 func init() {
-    modules.Register("k6/x/clickhouse", new(Clickhouse))
+	modules.Register("k6/x/clickhouse", new(Clickhouse))
 }
 
-// Compare is the type for our custom API.
-type Clickhouse struct{
-    ComparisonResult string // textual description of the most recent comparison
+type Clickhouse struct{}
+
+// type Client struct {
+// 	client *Clickhouse.Client
+// }
+
+func (cl *Clickhouse) Connect(connURI string) (*clickhouse.Conn, error) {
+	clickConn, err := clickhouse.Open(connURI)
+	if err != nil {
+		return nil, err
+	}
+	
+	ctx := context.Background()
+	
+	return clickConn, nil
 }
 
-// IsGreater returns true if a is greater than b, or false otherwise, setting textual result message.
-func (c *Clickhouse) IsGreater(a, b int) bool {
-    if a > b {
-        c.ComparisonResult = fmt.Sprintf("%d is greater than %d", a, b)
-        return true
-    } else {
-        c.ComparisonResult = fmt.Sprintf("%d is NOT greater than %d", a, b)
-        return false
-    }
+func (cl *Clickhouse) Close() error {
+	err := cl.clickConn.Close()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (cl *Clickhouse) Insert(conn net.Conn, data []byte) error {
+	_, err := conn.Write(data)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (cl *Clickhouse) Batch(conn net.Conn, data []byte) error {
+	_, err := conn.Write(data)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
