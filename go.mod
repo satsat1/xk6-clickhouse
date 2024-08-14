@@ -9,6 +9,9 @@ require (
 	go.k6.io/k6 v0.45.1
 	go.uber.org/zap v1.24.0
 	gopkg.in/guregu/null.v4 v4.0.0
+)
+
+require (
 	github.com/ClickHouse/ch-go v0.57.0 // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
