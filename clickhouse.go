@@ -18,7 +18,9 @@ func init() {
 	modules.Register("k6/x/clickhouse", new(Clickhouse))
 }
 
-type Clickhouse struct{}
+type Clickhouse struct{
+	clickConn clickhouse.Conn
+}
 
 // type Client struct {
 // 	client *Clickhouse.Client
@@ -30,7 +32,7 @@ func (cl *Clickhouse) Connect( host string, port int, database string, username 
 	// 	return nil, err
 	// }
 
-	conn, err := clickhouse.Open(&clickhouse.Options{
+	cl.clickConn, err := clickhouse.Open(&clickhouse.Options{
 		Addr: []string{fmt.Sprintf("%s:%d", host, port)},
 		Auth: clickhouse.Auth{
 			Database: database,
@@ -43,7 +45,6 @@ func (cl *Clickhouse) Connect( host string, port int, database string, username 
 	}
 
 	ctx := context.Background()
-	cl.clickConn = conn
 
 	return conn, nil
 }
