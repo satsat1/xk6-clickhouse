@@ -1,7 +1,7 @@
 package clickhouse
 
 import (
-	// "context"
+	"context"
 	// "encoding/json"
 	"fmt"
 	"go.k6.io/k6/js/modules"
@@ -21,34 +21,41 @@ func init() {
 
 type Clickhouse struct{
 	clickConn		clickhouse.Conn
-	ctx				context.Context
+	ctx			context.Context
 }
 
 // type Client struct {
 // 	client *Clickhouse.Client
 // }
 
-func (cl *Clickhouse) Connect( host string, port int, database string, username string, password string) error {
+func (cl *Clickhouse) Connect( host string, port int, database string, username string, password string ) error {
 	// clickConn, err := clickhouse.Open(connURI)
 	// if err != nil {
 	// 	return nil, err
 	// }
 
-	cl.clickConn, err := clickhouse.Open(&clickhouse.Options{
-		Addr: []string{fmt.Sprintf("%s:%d", host, port)},
-		Auth: clickhouse.Auth{
-			Database: database,
-			Username: username,
-			Password: password,
-		},
-	})
+	clickConn, err := clickhouse.Open(
+		&clickhouse.Options{
+			Addr: []string{fmt.Sprintf("%s:%d", host, port)},
+			Auth: clickhouse.Auth{
+				Database: database,
+				Username: username,
+				Password: password
+			}
+		}
+	)
 	if err != nil {
 		return err
 	}
-
-	cl.ctx := context.Background()
-
+	
+	cl.clickConn = clickConn
+	cl.ctx = context.Background()
+	
 	return nil
+	// return &Clickhouse{
+	// 	clickConn:	clickConn,
+	// 	ctx:		context.Background()
+	// }
 }
 
 func (cl *Clickhouse) Close() error {
