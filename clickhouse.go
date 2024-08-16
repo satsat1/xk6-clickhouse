@@ -2,13 +2,14 @@ package clickhouse
 
 import (
 	"context"
-	"encoding/json"
+	// "encoding/json"
 	"fmt"
-	
+	"go.k6.io/k6/js/modules"
+
 	"github.com/ClickHouse/clickhouse-go/v2"
-	"github.com/ClickHouse/clickhouse-go/v2/lib/driver"
-	"github.com/mstoykov/envconfig"
-	"go.k6.io/k6/lib/types"
+	// "github.com/ClickHouse/clickhouse-go/v2/lib/driver"
+	// "github.com/mstoykov/envconfig"
+	// "go.k6.io/k6/lib/types"
 	"gopkg.in/guregu/null.v4"
 	"strings"
 	"time"
@@ -26,7 +27,7 @@ type Clickhouse struct{
 // 	client *Clickhouse.Client
 // }
 
-func (cl *Clickhouse) Connect( host string, port int, database string, username string, password string) (*clickhouse.Conn, error) {
+func (cl *Clickhouse) Connect( host string, port int, database string, username string, password string) error {
 	// clickConn, err := clickhouse.Open(connURI)
 	// if err != nil {
 	// 	return nil, err
@@ -41,12 +42,12 @@ func (cl *Clickhouse) Connect( host string, port int, database string, username 
 		},
 	})
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	ctx := context.Background()
+	// ctx := context.Background()
 
-	return conn, nil
+	return nil
 }
 
 func (cl *Clickhouse) Close() error {
@@ -57,8 +58,8 @@ func (cl *Clickhouse) Close() error {
 	return nil
 }
 
-func (cl *Clickhouse) Insert(data []byte) error {
-	_, err := cl.clickConn.Write(data)
+func (cl *Clickhouse) Insert(data string) error {
+	_, err := cl.clickConn.Exec(data)
 	if err != nil {
 		return err
 	}
@@ -66,11 +67,11 @@ func (cl *Clickhouse) Insert(data []byte) error {
 	return nil
 }
 
-func (cl *Clickhouse) Batch(data []byte) error {
-	_, err := cl.clickConn.Write(data)
-	if err != nil {
-		return err
-	}
+// func (cl *Clickhouse) Batch(data []byte) error {
+// 	_, err := cl.clickConn.Write(data)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	return nil
-}
+// 	return nil
+// }
