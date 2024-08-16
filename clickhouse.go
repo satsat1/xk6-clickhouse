@@ -31,7 +31,7 @@ func (cl *Clickhouse) Connect( host string, port int, database string, username 
 	// }
 
 	conn, err := clickhouse.Open(&clickhouse.Options{
-		Addr: []string{fmt.Sprintf("%s:%d", Host, port)},
+		Addr: []string{fmt.Sprintf("%s:%d", host, port)},
 		Auth: clickhouse.Auth{
 			Database: database,
 			Username: username,
