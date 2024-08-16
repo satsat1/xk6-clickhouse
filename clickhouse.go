@@ -1,7 +1,7 @@
 package clickhouse
 
 import (
-	"context"
+	// "context"
 	// "encoding/json"
 	"fmt"
 	"go.k6.io/k6/js/modules"
@@ -10,9 +10,9 @@ import (
 	// "github.com/ClickHouse/clickhouse-go/v2/lib/driver"
 	// "github.com/mstoykov/envconfig"
 	// "go.k6.io/k6/lib/types"
-	"gopkg.in/guregu/null.v4"
-	"strings"
-	"time"
+	// "gopkg.in/guregu/null.v4"
+	// "strings"
+	// "time"
 )
 
 func init() {
@@ -20,7 +20,8 @@ func init() {
 }
 
 type Clickhouse struct{
-	clickConn clickhouse.Conn
+	clickConn		clickhouse.Conn
+	ctx				context.Context
 }
 
 // type Client struct {
@@ -45,7 +46,7 @@ func (cl *Clickhouse) Connect( host string, port int, database string, username 
 		return err
 	}
 
-	// ctx := context.Background()
+	cl.ctx := context.Background()
 
 	return nil
 }
@@ -59,7 +60,7 @@ func (cl *Clickhouse) Close() error {
 }
 
 func (cl *Clickhouse) Insert(data string) error {
-	_, err := cl.clickConn.Exec(data)
+	_, err := cl.clickConn.Exec(cl.ctx, data)
 	if err != nil {
 		return err
 	}
