@@ -24,15 +24,28 @@ type Clickhouse struct{}
 // 	client *Clickhouse.Client
 // }
 
-func (cl *Clickhouse) Connect(connURI string) (*clickhouse.Conn, error) {
-	clickConn, err := clickhouse.Open(connURI)
+func (cl *Clickhouse) Connect( host string, port int, database string, username string, password string) (*clickhouse.Conn, error) {
+	// clickConn, err := clickhouse.Open(connURI)
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	conn, err := clickhouse.Open(&clickhouse.Options{
+		Addr: []string{fmt.Sprintf("%s:%d", Host, port)},
+		Auth: clickhouse.Auth{
+			Database: database,
+			Username: username,
+			Password: password,
+		},
+	})
 	if err != nil {
 		return nil, err
 	}
-	
+
 	ctx := context.Background()
-	
-	return clickConn, nil
+	cl.clickConn = conn
+
+	return conn, nil
 }
 
 func (cl *Clickhouse) Close() error {
@@ -43,8 +56,8 @@ func (cl *Clickhouse) Close() error {
 	return nil
 }
 
-func (cl *Clickhouse) Insert(conn net.Conn, data []byte) error {
-	_, err := conn.Write(data)
+func (cl *Clickhouse) Insert(data []byte) error {
+	_, err := cl.clickConn.Write(data)
 	if err != nil {
 		return err
 	}
@@ -52,8 +65,8 @@ func (cl *Clickhouse) Insert(conn net.Conn, data []byte) error {
 	return nil
 }
 
-func (cl *Clickhouse) Batch(conn net.Conn, data []byte) error {
-	_, err := conn.Write(data)
+func (cl *Clickhouse) Batch(data []byte) error {
+	_, err := cl.clickConn.Write(data)
 	if err != nil {
 		return err
 	}
