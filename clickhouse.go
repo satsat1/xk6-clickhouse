@@ -64,7 +64,7 @@ func (cl *Clickhouse) Close() error {
 }
 
 func (cl *Clickhouse) Insert(data string) error {
-	_, err := cl.clickConn.Exec(cl.ctx, data)
+	err := cl.clickConn.Exec(cl.ctx, data)
 	if err != nil {
 		return err
 	}
