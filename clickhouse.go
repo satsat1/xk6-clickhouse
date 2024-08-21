@@ -30,6 +30,10 @@ func (c *Compare) IsGreater(a, b int) bool {
     }
 }
 
+func (cl *Clickhouse) Connect( port int ) error {
+	return nil
+}
+
 func (c *Compare) Connect( host string, port int, database string, username string, password string ) error {
 	// clickConn, err := clickhouse.Open(connURI)
 	// if err != nil {
