@@ -66,7 +66,7 @@ func (c *Compare) Close() error {
 }
 
 func (c *Compare) Insert(data string) error {
-	err := c.clickConn.Exec(cl.ctx, data)
+	err := c.clickConn.Exec(c.ctx, data)
 	if err != nil {
 		return err
 	}
