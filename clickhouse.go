@@ -74,9 +74,7 @@ func (c *Compare) Connect1( host string, port int, database string, username str
 		return err
 	}
 	
-	ctx := context.Background()
-
-	err := clickConn.Exec(ctx, data)
+	err := clickConn.Exec(context.Background(), data)
 	
 	return nil
 	// return &Clickhouse{
