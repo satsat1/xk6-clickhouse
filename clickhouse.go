@@ -30,8 +30,8 @@ func (c *Compare) IsGreater(a, b int) bool {
     }
 }
 
-func (c *Compare) Connect1( port int ) error {
-	return nil
+func (c *Compare) Connect1(port int ) bool {
+	return true
 }
 
 func (c *Compare) Connect( host string, port int, database string, username string, password string ) error {
