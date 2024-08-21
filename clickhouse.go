@@ -1,18 +1,22 @@
-package clickhouse
+package k6clickhouse
 
 import (
-    "fmt"
-    "go.k6.io/k6/js/modules"
+	"context"
+	"fmt"
+	"go.k6.io/k6/js/modules"
+	"github.com/ClickHouse/clickhouse-go/v2"
 )
 
 // init is called by the Go runtime at application startup.
 func init() {
-    modules.Register("k6/x/clickhouse", new(Compare))
+    modules.Register("k6/x/k6clickhouse", new(Compare))
 }
 
 // Compare is the type for our custom API.
 type Compare struct{
     ComparisonResult string // textual description of the most recent comparison
+    clickConn        clickhouse.Conn
+	ctx              context.Context
 }
 
 // IsGreater returns true if a is greater than b, or false otherwise, setting textual result message.
