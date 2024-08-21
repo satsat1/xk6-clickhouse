@@ -1,4 +1,4 @@
-package clickhouse
+package k6clickhouse
 
 import (
 	"context"
@@ -16,10 +16,10 @@ import (
 )
 
 func init() {
-	modules.Register("k6/x/clickhouse", new(Clickhouse))
+	modules.Register("k6/x/k6clickhouse", new(k6Clickhouse))
 }
 
-type Clickhouse struct{
+type k6Clickhouse struct{
 	clickConn		clickhouse.Conn
 	ctx			context.Context
 }
@@ -28,7 +28,7 @@ type Clickhouse struct{
 // 	client *Clickhouse.Client
 // }
 
-func (cl *Clickhouse) Connect( host string, port int, database string, username string, password string ) error {
+func (cl *k6Clickhouse) Connect( host string, port int, database string, username string, password string ) error {
 	// clickConn, err := clickhouse.Open(connURI)
 	// if err != nil {
 	// 	return nil, err
@@ -55,7 +55,7 @@ func (cl *Clickhouse) Connect( host string, port int, database string, username 
 	// }
 }
 
-func (cl *Clickhouse) Close() error {
+func (cl *k6Clickhouse) Close() error {
 	err := cl.clickConn.Close()
 	if err != nil {
 		return err
@@ -63,7 +63,7 @@ func (cl *Clickhouse) Close() error {
 	return nil
 }
 
-func (cl *Clickhouse) Insert(data string) error {
+func (cl *k6Clickhouse) Insert(data string) error {
 	err := cl.clickConn.Exec(cl.ctx, data)
 	if err != nil {
 		return err
