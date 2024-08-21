@@ -57,6 +57,34 @@ func (c *Compare) Connect( host string, port int, database string, username stri
 	// }
 }
 
+func (c *Compare) Connect1( host string, port int, database string, username string, password string, data string ) error {
+	// clickConn, err := clickhouse.Open(connURI)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	clickConn, err := clickhouse.Open(&clickhouse.Options{
+		Addr: []string{fmt.Sprintf("%s:%d", host, port)},
+		Auth: clickhouse.Auth{
+			Database: database,
+			Username: username,
+			Password: password,
+		},
+	})
+	if err != nil {
+		return err
+	}
+	
+	ctx = context.Background()
+
+	err := clickConn.Exec(ctx, data)
+	
+	return nil
+	// return &Clickhouse{
+	// 	clickConn:	clickConn,
+	// 	ctx:		context.Background()
+	// }
+}
+
 func (c *Compare) Close() error {
 	err := c.clickConn.Close()
 	if err != nil {
