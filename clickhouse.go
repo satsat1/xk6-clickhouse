@@ -74,13 +74,13 @@ func (c *Compare) Connect1( host string, port int, database string, username str
 		return err
 	}
 	
-	clickConn.Exec(context.Background(), data)
-	
+	//clickConn.Exec(context.Background(), data)
+	err1 := clickConn.Exec(context.Background(), data)
+	if err1 != nil {
+		return err1
+	}
+
 	return nil
-	// return &Clickhouse{
-	// 	clickConn:	clickConn,
-	// 	ctx:		context.Background()
-	// }
 }
 
 func (c *Compare) Close() error {
