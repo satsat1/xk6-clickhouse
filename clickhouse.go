@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"log"
 	"go.k6.io/k6/js/modules"
+	"database/sql"
 	"github.com/ClickHouse/clickhouse-go/v2"
 	// "net"
-	// "time"
+	"time"
 )
 
 // init is called by the Go runtime at application startup.
@@ -62,11 +63,28 @@ func (c *Compare) Connect( host string, port int, database string, username stri
 }
 
 func (c *Compare) Connect1( host string, port int, database string, username string, password string, data string ) error {
-	// clickConn, err := clickhouse.Open(connURI)
+	
+	// conn, err := sql.Open("clickhouse", fmt.Sprintf("clickhouse://%s:%d/%s?username=%s&password=%s&dial_timeout=10s&connection_open_strategy=round_robin&debug=true&compress=lz4", host, port, database, username, password))
+	
+	// // conn, err := sql.Open("clickhouse", fmt.Sprintf("http://%s:%d?username=%s&password=%s", env.Host, env.HttpPort, env.Username, env.Password))
 	// if err != nil {
-	// 	return nil, err
+	// 	log.Print("connect error")
+	// 	log.Print(err)
+	// 	//log.Fatal(err)
 	// }
-	// dialCount := 0
+	
+	// if err = conn.Ping(); err != nil {
+	// 	log.Print("ping error")
+	// 	log.Print(err)
+	// }
+
+	
+	
+	clickConn, err := clickhouse.Open(connURI)
+	if err != nil {
+		return nil, err
+	}
+	dialCount := 0
 	var (
 		ctx       = context.Background()
 		conn, err = clickhouse.Open(&clickhouse.Options{
@@ -85,9 +103,13 @@ func (c *Compare) Connect1( host string, port int, database string, username str
 			Debugf: func(format string, v ...any) {
 				fmt.Printf(format, v)
 			},
-			// Settings: clickhouse.Settings{
-			// 	"max_execution_time": 60,
-			// },
+			Settings: clickhouse.Settings{
+				"max_execution_time": 60,
+			},
+			DialTimeout: 5 * time.Second,
+			Compression: &clickhouse.Compression{
+				Method: clickhouse.CompressionLZ4,
+			},
 		})
 	)
 	if err != nil {
