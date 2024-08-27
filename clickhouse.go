@@ -6,6 +6,8 @@ import (
 	"log"
 	"go.k6.io/k6/js/modules"
 	"github.com/ClickHouse/clickhouse-go/v2"
+	"net"
+	"time"
 )
 
 // init is called by the Go runtime at application startup.
