@@ -44,6 +44,7 @@ func (c *Compare) Connect( host string, port int, database string, username stri
 			Password: password,
 		},
 	})
+		
 	if err != nil {
 		return err
 	}
@@ -80,6 +81,9 @@ func (c *Compare) Connect1( host string, port int, database string, username str
 		//log.Fatal(err)
 	}
 
+	v, err := conn.ServerVersion()
+	fmt.Println(v)
+	
 	if err := conn.Exec(ctx, data); err != nil {
 		
 		log.Print("query error")
@@ -88,44 +92,8 @@ func (c *Compare) Connect1( host string, port int, database string, username str
 		//log.Fatal(err)
 	}
 	
-	// //clickConn.Exec(context.Background(), data)
-	// err1 := clickConn.Exec(context.Background(), data)
-	// if err1 != nil {
-	// 	return err1
-	// }
-
 	return nil
 
-	// var (
-	// 	ctx       = context.Background()
-	// 	conn, err = clickhouse.Open(&clickhouse.Options{
-	// 		Addr: []string{"127.0.0.1:9000"},
-	// 		Auth: clickhouse.Auth{
-	// 			Database: "default",
-	// 			Username: "default",
-	// 			Password: "",
-	// 		},
-	// 		//Debug:           true,
-	// 		DialTimeout:     time.Second,
-	// 		MaxOpenConns:    10,
-	// 		MaxIdleConns:    5,
-	// 		ConnMaxLifetime: time.Hour,
-	// 	})
-	// )
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// if err := conn.Exec(ctx, "DROP TABLE IF EXISTS benchmark_async"); err != nil {
-	// 	log.Fatal(err)
-	// }
-	// if err := conn.Exec(ctx, ddl); err != nil {
-	// 	log.Fatal(err)
-	// }
-	// start := time.Now()
-	// if err := benchmark(conn); err != nil {
-	// 	log.Fatal(err)
-	// }
-	// fmt.Println(time.Since(start))
 	
 }
 
