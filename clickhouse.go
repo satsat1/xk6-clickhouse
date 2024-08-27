@@ -75,11 +75,17 @@ func (c *Compare) Connect1( host string, port int, database string, username str
 		})
 	)
 	if err != nil {
-		log.Fatal(err)
+		log.Print("connect error")
+		log.Print(err)
+		//log.Fatal(err)
 	}
 
 	if err := conn.Exec(ctx, data); err != nil {
-		log.Fatal(err)
+		
+		log.Print("query error")
+		log.Print(data)
+		log.Print(err)
+		//log.Fatal(err)
 	}
 	
 	// //clickConn.Exec(context.Background(), data)
