@@ -65,7 +65,7 @@ func (c *Compare) Connect1( host string, port int, database string, username str
 	// }
 	var (
 		ctx       = context.Background()
-		clickConn, err := clickhouse.Open(&clickhouse.Options{
+		conn, err = clickhouse.Open(&clickhouse.Options{
 			Addr: []string{fmt.Sprintf("%s:%d", host, port)},
 			Auth: clickhouse.Auth{
 				Database: database,
@@ -78,7 +78,7 @@ func (c *Compare) Connect1( host string, port int, database string, username str
 		log.Fatal(err)
 	}
 
-	if err := clickConn.Exec(ctx, data); err != nil {
+	if err := conn.Exec(ctx, data); err != nil {
 		log.Fatal(err)
 	}
 	
