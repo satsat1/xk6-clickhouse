@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	"go.k6.io/k6/js/modules"
-	"database/sql"
+	// "database/sql"
 	"github.com/ClickHouse/clickhouse-go/v2"
 	// "net"
 	"time"
@@ -80,11 +80,11 @@ func (c *Compare) Connect1( host string, port int, database string, username str
 
 	
 	
-	clickConn, err := clickhouse.Open(connURI)
-	if err != nil {
-		return nil, err
-	}
-	dialCount := 0
+	// clickConn, err := clickhouse.Open(connURI)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// dialCount := 0
 	var (
 		ctx       = context.Background()
 		conn, err = clickhouse.Open(&clickhouse.Options{
