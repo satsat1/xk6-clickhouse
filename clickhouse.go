@@ -184,6 +184,45 @@ func (c *Compare) Connect3( host string, port int, database string, username str
 	return nil
 	
 }
+
+func (c *Compare) Connect4( host string, port int, database string, username string, password string, data string ) error {
+	
+	conn, err := sql.Open("clickhouse", fmt.Sprintf("clickhouse://%s:%d/%s?username=%s&password=%s&dial_timeout=10s&connection_open_strategy=round_robin&debug=true&compress=lz4&secure=false&&skip_verify=false", host, port, database, username, password))
+	
+	// // conn, err := sql.Open("clickhouse", fmt.Sprintf("http://%s:%d?username=%s&password=%s", env.Host, env.HttpPort, env.Username, env.Password))
+	if err != nil {
+		log.Print("connect error")
+		log.Print(err)
+		//log.Fatal(err)
+	}
+	
+	if err = conn.Ping(); err != nil {
+		log.Print("ping error")
+		log.Print(err)
+	}
+
+	return nil
+	
+}
+func (c *Compare) Connect5( connstr string ) error {
+	
+	conn, err := sql.Open("clickhouse", connstr)
+	
+	// // conn, err := sql.Open("clickhouse", fmt.Sprintf("http://%s:%d?username=%s&password=%s", env.Host, env.HttpPort, env.Username, env.Password))
+	if err != nil {
+		log.Print("connect error")
+		log.Print(err)
+		//log.Fatal(err)
+	}
+	
+	if err = conn.Ping(); err != nil {
+		log.Print("ping error")
+		log.Print(err)
+	}
+
+	return nil
+	
+}
 	
 func (c *Compare) Close() error {
 	err := c.clickConn.Close()
