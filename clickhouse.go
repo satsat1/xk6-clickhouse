@@ -7,7 +7,7 @@ import (
 	"go.k6.io/k6/js/modules"
 	"github.com/ClickHouse/clickhouse-go/v2"
 	"net"
-	"time"
+	// "time"
 )
 
 // init is called by the Go runtime at application startup.
@@ -66,7 +66,7 @@ func (c *Compare) Connect1( host string, port int, database string, username str
 	// if err != nil {
 	// 	return nil, err
 	// }
-	dialCount := 0
+	// dialCount := 0
 	var (
 		ctx       = context.Background()
 		conn, err = clickhouse.Open(&clickhouse.Options{
@@ -99,8 +99,10 @@ func (c *Compare) Connect1( host string, port int, database string, username str
 	v, err := conn.ServerVersion()
 	log.Print("version")
 	fmt.Println(v)
+	log.Print("version-err")
+	log.Print(err)
 	log.Print("host,port")
-	log.Print( fmt.Sprintf("%s:%d", host, port) )
+	fmt.Printf("%s:%d", host, port)
 	log.Print("database")
 	log.Print(database)
 	log.Print("username")
