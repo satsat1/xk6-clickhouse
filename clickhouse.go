@@ -242,8 +242,8 @@ func (c *Compare) Connect6( connstr string, data string ) error {
 	// 	log.Print("ping error")
 	// 	log.Print(err)
 	// }
-
-	if err := conn.Exec(data); err != nil {
+	res, err := conn.Exec(data)
+	if  err != nil {
 		
 		log.Print("query error")
 		log.Print(data)
