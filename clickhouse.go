@@ -223,6 +223,37 @@ func (c *Compare) Connect5( connstr string ) error {
 	return nil
 	
 }
+
+func (c *Compare) Connect6( connstr string, data string ) error {
+
+	var (
+		ctx       = context.Background()
+	)
+	conn, err := sql.Open("clickhouse", connstr)
+	
+	// // conn, err := sql.Open("clickhouse", fmt.Sprintf("http://%s:%d?username=%s&password=%s", env.Host, env.HttpPort, env.Username, env.Password))
+	if err != nil {
+		log.Print("connect error")
+		log.Print(err)
+		//log.Fatal(err)
+	}
+	
+	// if err = conn.Ping(); err != nil {
+	// 	log.Print("ping error")
+	// 	log.Print(err)
+	// }
+
+	if err := conn.Exec(ctx, data); err != nil {
+		
+		log.Print("query error")
+		log.Print(data)
+		log.Print(err)
+		//log.Fatal(err)
+	}
+	
+	return nil
+	
+}
 	
 func (c *Compare) Close() error {
 	err := c.clickConn.Close()
