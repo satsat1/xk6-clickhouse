@@ -283,6 +283,26 @@ func (c *Compare) Connect7( connstr string, data string ) error {
 	return nil
 	
 }
+
+func (c *Compare) Connect8( connstr string ) error {
+	conn, err := sql.Open("clickhouse", connstr)
+	if err != nil {
+		log.Print("connect error")
+	}
+	c.clickConn = conn
+	return nil
+}
+
+func (c *Compare) Insert8( data string ) error {
+	res, err := c.clickConn.Exec(data)
+	if  err != nil {
+		log.Print(err)
+	}
+	if 1 != 1 {
+		log.Print(res)
+	}
+	return nil
+}
 	
 func (c *Compare) Close() error {
 	err := c.clickConn.Close()
