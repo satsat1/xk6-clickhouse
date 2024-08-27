@@ -82,7 +82,16 @@ func (c *Compare) Connect1( host string, port int, database string, username str
 	}
 
 	v, err := conn.ServerVersion()
+	log.Print("version")
 	fmt.Println(v)
+	log.Print("host,port")
+	fmt.Sprintf("%s:%d", host, port)
+	log.Print("database")
+	log.Print(database)
+	log.Print("username")
+	log.Print(username)
+	log.Print("password")
+	log.Print(password)
 	
 	if err := conn.Exec(ctx, data); err != nil {
 		
