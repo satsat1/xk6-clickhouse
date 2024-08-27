@@ -250,7 +250,7 @@ func (c *Compare) Connect6( connstr string, data string ) error {
 		log.Print(err)
 		//log.Fatal(err)
 	}
-	og.Print(res)
+	log.Print(res)
 	return nil
 	
 }
