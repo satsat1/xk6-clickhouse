@@ -64,6 +64,7 @@ func (c *Compare) Connect1( host string, port int, database string, username str
 	// if err != nil {
 	// 	return nil, err
 	// }
+	dialCount := 0
 	var (
 		ctx       = context.Background()
 		conn, err = clickhouse.Open(&clickhouse.Options{
@@ -72,6 +73,18 @@ func (c *Compare) Connect1( host string, port int, database string, username str
 				Database: database,
 				Username: username,
 				Password: password,
+			},
+			DialContext: func(ctx context.Context, addr string) (net.Conn, error) {
+				dialCount++
+				var d net.Dialer
+				return d.DialContext(ctx, "tcp", addr)
+			},
+			Debug: true,
+			Debugf: func(format string, v ...any) {
+				fmt.Printf(format, v)
+			},
+			Settings: clickhouse.Settings{
+				"max_execution_time": 60,
 			},
 		})
 	)
@@ -85,7 +98,7 @@ func (c *Compare) Connect1( host string, port int, database string, username str
 	log.Print("version")
 	fmt.Println(v)
 	log.Print("host,port")
-	fmt.Sprintf("%s:%d", host, port)
+	log.Print( []string{fmt.Sprintf("%s:%d", host, port)} )
 	log.Print("database")
 	log.Print(database)
 	log.Print("username")
