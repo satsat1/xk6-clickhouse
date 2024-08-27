@@ -20,7 +20,8 @@ func init() {
 type Compare struct{
     ComparisonResult string // textual description of the most recent comparison
     clickConn        clickhouse.Conn
-	ctx              context.Context
+    ctx              context.Context
+    pool	     *sql.DB
 }
 
 // IsGreater returns true if a is greater than b, or false otherwise, setting textual result message.
@@ -285,16 +286,24 @@ func (c *Compare) Connect7( connstr string, data string ) error {
 }
 
 func (c *Compare) Connect8( connstr string ) error {
-	conn, err := sql.Open("clickhouse", connstr)
+	
+	pool, err := sql.Open("clickhouse", connstr)
+	
 	if err != nil {
 		log.Print("connect error")
 	}
-	c.clickConn = conn
+	
+	pool.SetConnMaxLifetime(0)
+	pool.SetMaxIdleConns(500)
+	pool.SetMaxOpenConns(500)
+	
+	c.pool = pool
+	
 	return nil
 }
 
 func (c *Compare) Insert8( data string ) error {
-	res, err := c.clickConn.Exec(data)
+	res, err := c.pool.Exec(data)
 	if  err != nil {
 		log.Print(err)
 	}
