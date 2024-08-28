@@ -8,7 +8,7 @@ import (
 	"database/sql"
 	"github.com/ClickHouse/clickhouse-go/v2"
 	// "net"
-	// "time"
+	"time"
 )
 
 // init is called by the Go runtime at application startup.
@@ -65,7 +65,7 @@ func (c *Compare) Connect( host string, port int, database string, username stri
 
 func (c *Compare) Connect1( host string, port int, database string, username string, password string, data string ) error {
 	
-	dialCount := 0
+	// dialCount := 0
 	var (
 		ctx       = context.Background()
 		conn, err = clickhouse.Open(&clickhouse.Options{
