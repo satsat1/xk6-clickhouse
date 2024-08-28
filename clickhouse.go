@@ -100,11 +100,11 @@ func (c *Compare) Connect1( host string, port int, database string, username str
 		//log.Fatal(err)
 	}
 
-	v, err := conn.ServerVersion()
-	log.Print("version")
-	fmt.Println(v)
-	log.Print("version-err")
-	log.Print(err)
+	// v, err := conn.ServerVersion()
+	// log.Print("version")
+	// fmt.Println(v)
+	// log.Print("version-err")
+	// log.Print(err)
 	// log.Print("host,port")
 	// fmt.Printf("%s:%d", host, port)
 	// log.Print("database")
@@ -121,7 +121,7 @@ func (c *Compare) Connect1( host string, port int, database string, username str
 		log.Print(err)
 		//log.Fatal(err)
 	}
-	
+	log.Print("end connect1")
 	return nil
 
 	
