@@ -65,65 +65,46 @@ func (c *Compare) Connect( host string, port int, database string, username stri
 
 func (c *Compare) Connect1( host string, port int, database string, username string, password string, data string ) error {
 	
-	conn, err := sql.Open("clickhouse", fmt.Sprintf("clickhouse://%s:%d/%s?username=%s&password=%s&dial_timeout=10s&connection_open_strategy=round_robin&debug=true&compress=lz4&skip_verify=true", host, port, database, username, password))
-	
-	// // conn, err := sql.Open("clickhouse", fmt.Sprintf("http://%s:%d?username=%s&password=%s", env.Host, env.HttpPort, env.Username, env.Password))
+	dialCount := 0
+	var (
+		ctx       = context.Background()
+		conn, err = clickhouse.Open(&clickhouse.Options{
+			Addr: []string{fmt.Sprintf("%s:%d", host, port)},
+			Auth: clickhouse.Auth{
+				Database: database,
+				Username: username,
+				Password: password,
+			},
+			// DialContext: func(ctx context.Context, addr string) (net.Conn, error) {
+			// 	dialCount++
+			// 	var d net.Dialer
+			// 	return d.DialContext(ctx, "tcp", addr)
+			// },
+			Protocol: clickhouse.HTTP,
+			// Debug: true,
+			// Debugf: func(format string, v ...any) {
+			// 	fmt.Printf(format, v)
+			// },
+			Settings: clickhouse.Settings{
+				"max_execution_time": 60,
+			},
+			DialTimeout: 5 * time.Second,
+			Compression: &clickhouse.Compression{
+				Method: clickhouse.CompressionLZ4,
+			},
+		})
+	)
 	if err != nil {
 		log.Print("connect error")
 		log.Print(err)
 		//log.Fatal(err)
 	}
-	
-	if err = conn.Ping(); err != nil {
-		log.Print("ping error")
-		log.Print(err)
-	}
 
-	
-	
-	// clickConn, err := clickhouse.Open(connURI)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// dialCount := 0
-	// var (
-	// 	ctx       = context.Background()
-	// 	conn, err = clickhouse.Open(&clickhouse.Options{
-	// 		Addr: []string{fmt.Sprintf("%s:%d", host, port)},
-	// 		Auth: clickhouse.Auth{
-	// 			Database: database,
-	// 			Username: username,
-	// 			Password: password,
-	// 		},
-	// 		// DialContext: func(ctx context.Context, addr string) (net.Conn, error) {
-	// 		// 	dialCount++
-	// 		// 	var d net.Dialer
-	// 		// 	return d.DialContext(ctx, "tcp", addr)
-	// 		// },
-	// 		Debug: true,
-	// 		Debugf: func(format string, v ...any) {
-	// 			fmt.Printf(format, v)
-	// 		},
-	// 		Settings: clickhouse.Settings{
-	// 			"max_execution_time": 60,
-	// 		},
-	// 		DialTimeout: 5 * time.Second,
-	// 		Compression: &clickhouse.Compression{
-	// 			Method: clickhouse.CompressionLZ4,
-	// 		},
-	// 	})
-	// )
-	// if err != nil {
-	// 	log.Print("connect error")
-	// 	log.Print(err)
-	// 	//log.Fatal(err)
-	// }
-
-	// v, err := conn.ServerVersion()
-	// log.Print("version")
-	// fmt.Println(v)
-	// log.Print("version-err")
-	// log.Print(err)
+	v, err := conn.ServerVersion()
+	log.Print("version")
+	fmt.Println(v)
+	log.Print("version-err")
+	log.Print(err)
 	// log.Print("host,port")
 	// fmt.Printf("%s:%d", host, port)
 	// log.Print("database")
@@ -133,13 +114,13 @@ func (c *Compare) Connect1( host string, port int, database string, username str
 	// log.Print("password")
 	// log.Print(password)
 	
-	// if err := conn.Exec(ctx, data); err != nil {
+	if err := conn.Exec(ctx, data); err != nil {
 		
-	// 	log.Print("query error")
-	// 	log.Print(data)
-	// 	log.Print(err)
-	// 	//log.Fatal(err)
-	// }
+		log.Print("query error")
+		// log.Print(data)
+		log.Print(err)
+		//log.Fatal(err)
+	}
 	
 	return nil
 
