@@ -275,8 +275,8 @@ func (c *Compare) Connect8( connstr string ) error {
 	}
 	
 	pool.SetConnMaxLifetime(0)
-	pool.SetMaxIdleConns(500)
-	pool.SetMaxOpenConns(500)
+	pool.SetMaxIdleConns(5000)
+	pool.SetMaxOpenConns(5000)
 	
 	c.pool = pool
 	
